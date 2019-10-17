@@ -23,6 +23,12 @@ public class RobotMap {
   // number and the module. For example you with a rangefinder:
   // public static int rangefinderPort = 1;
   // public static int rangefinderModule = 1;
+  public static final int SHOOTER_ANGLE_MOTOR_PORT = 1;
+  public static final int SHOOTER_MOTOR_PORT_1 = 2;
+  public static final int SHOOTER_MOTOR_PORT_2 = 3;
+  public static final int UPPER_LIMIT_PORT = 4;
+  public static final int LOWER_LIMIT_PORT = 5;
+  public static final double SHOOTER_SPEED_STEP = 0.25;
 
   public static final int XBOX_CONTROLLER_PORT = 3;
   public static final int SOLENOID_MODULE = 3;
