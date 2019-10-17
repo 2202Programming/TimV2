@@ -25,6 +25,7 @@ public class LiftSubsystem extends Subsystem {
     XboxController xbox;
     DriverStation driverStation;
     Solenoid solenoidTop, solenoidBot;
+    ShooterSubsystem shooterSubsystem;
 
     public LiftSubsystem() {
         isGoingUp = true;
@@ -32,6 +33,7 @@ public class LiftSubsystem extends Subsystem {
         driverStation = DriverStation.getInstance();
         solenoidTop = new Solenoid(RobotMap.SOLENOID_MODULE, RobotMap.TOP_CHANNEL);
         solenoidBot = new Solenoid(RobotMap.SOLENOID_MODULE, RobotMap.BOT_CHANNEL);
+        shooterSubsystem = new ShooterSubsystem();
     }
 
     @Override
@@ -53,7 +55,7 @@ public class LiftSubsystem extends Subsystem {
      */
     public void run() {
         boolean isBPressed = xbox.getBButton();
-        if (shooterControl.isLowestAngle()) {
+        if (shooterSubsystem.isLowestAngle()) {
             if (isBPressed) {
                 solenoidTop.set(!isGoingUp);
                 solenoidBot.set(isGoingUp);
