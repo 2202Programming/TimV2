@@ -29,4 +29,10 @@ public class RobotMap {
   public static final int UPPER_LIMIT_PORT = 4;
   public static final int LOWER_LIMIT_PORT = 5;
   public static final double SHOOTER_SPEED_STEP = 0.25;
+  public static final double SHOOTER_LOADING_SPEED;
+  public static final int SHOOTER_LOADING_DIRECTION;
+  public static final double SHOOTER_FIRING_SPEED;
+  public static final int SHOOTER_FIRING_DIRECTION;
+  public static final double DEFAULT_SHOOTER_SPEED;
+
 }
