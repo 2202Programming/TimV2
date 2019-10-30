@@ -33,16 +33,31 @@ public class ShooterSubsystem extends Subsystem {
     boolean isLoadingPosition = false;
     boolean isFiringPosition = false;
     double angle;
-
-    public static final double SHOOTER_SPEED_STEP = 0.25;
-    public static double SHOOTER_LOADING_SPEED;
-    public static int SHOOTER_LOADING_DIRECTION;
-    public static double SHOOTER_FIRING_SPEED;
-    public static int SHOOTER_FIRING_DIRECTION;
-    public static double DEFAULT_SHOOTER_SPEED;
+    /*
+        SHOOTERMOTORPORT1 5
+        SHOOTERMOTORPORT2 6
+        SHOOTERANGLEMOTORPORT 7
+        SHOOTERSPEEDSTEP .2
+        UPPERLIMITPORT 7
+        LOWERLIMITPORT 6
+        ANGLEMOTORLIFTSPEED 0.3
+        SHOOTERSPEEDINCREMENTRESETPT 0.0
+        AUTOSPEED .2
+        SHOOTERSPEEDSTEPDIFF .1
+        DEFAULTSHOOTERSPEED 1.0
+        SHOOTERLOADINGSPEED 0.0
+        SHOOTERFIRINGSPEED .99
+        SHOOTERLOADINGDIRECTION -1.0 // these are for raising and lowering
+        SHOOTERFIRINGDIRECTION .99
+    */
+    final double SHOOTER_SPEED_STEP = 0.25;
+    final double SHOOTER_LOADING_SPEED = 0.0;
+    final double SHOOTER_LOADING_DIRECTION = -1;
+    final double SHOOTER_FIRING_SPEED = 0.99;
+    final double SHOOTER_FIRING_DIRECTION = 0.99;
+    final double DEFAULT_SHOOTER_SPEED = 1;
 
     public void initDefaultCommand() {
-        return;
     }
 
     public ShooterSubsystem() {
