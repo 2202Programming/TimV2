@@ -35,4 +35,10 @@ public class RobotMap {
   public static final int SHOOTER_FIRING_DIRECTION;
   public static final double DEFAULT_SHOOTER_SPEED;
 
+
+  public static final int XBOX_CONTROLLER_PORT = 3;
+  public static final int SOLENOID_MODULE = 3;
+  public static final int TOP_CHANNEL = 3;
+  public static final int BOT_CHANNEL = 3;
+
 }
