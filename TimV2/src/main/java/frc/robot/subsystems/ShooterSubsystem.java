@@ -62,7 +62,7 @@ public class ShooterSubsystem extends Subsystem {
 
     public ShooterSubsystem() {
 
-        xbox = new XboxController(3);
+        xbox = new XboxController(RobotMap.XBOX_CONTROLLER_PORT);
 
         angleMotor = new Victor(RobotMap.SHOOTER_ANGLE_MOTOR_PORT);
 
@@ -228,12 +228,7 @@ public class ShooterSubsystem extends Subsystem {
     }
 
     public boolean isRunning() {
-        double speed = shooterMotor1.get();
-        if (speed == 0)
-            return false;
-        else
-            return true;
-
+        return shooterMotor1.get() == 0;
     }
 
     public void SetShooterMotors(float speed) {
@@ -296,6 +291,5 @@ public class ShooterSubsystem extends Subsystem {
         } else if (xbox.getBButtonPressed()) {
             isFiringPosition = true;
         }
-
     }
 }
