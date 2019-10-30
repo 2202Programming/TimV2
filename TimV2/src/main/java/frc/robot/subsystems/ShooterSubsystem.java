@@ -35,11 +35,11 @@ public class ShooterSubsystem extends Subsystem {
     double angle;
 
     public static final double SHOOTER_SPEED_STEP = 0.25;
-    public static final double SHOOTER_LOADING_SPEED;
-    public static final int SHOOTER_LOADING_DIRECTION;
-    public static final double SHOOTER_FIRING_SPEED;
-    public static final int SHOOTER_FIRING_DIRECTION;
-    public static final double DEFAULT_SHOOTER_SPEED;
+    public static double SHOOTER_LOADING_SPEED;
+    public static int SHOOTER_LOADING_DIRECTION;
+    public static double SHOOTER_FIRING_SPEED;
+    public static int SHOOTER_FIRING_DIRECTION;
+    public static double DEFAULT_SHOOTER_SPEED;
 
     public void initDefaultCommand() {
         return;
