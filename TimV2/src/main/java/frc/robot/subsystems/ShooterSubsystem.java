@@ -34,6 +34,13 @@ public class ShooterSubsystem extends Subsystem {
     boolean isFiringPosition = false;
     double angle;
 
+    public static final double SHOOTER_SPEED_STEP = 0.25;
+    public static final double SHOOTER_LOADING_SPEED;
+    public static final int SHOOTER_LOADING_DIRECTION;
+    public static final double SHOOTER_FIRING_SPEED;
+    public static final int SHOOTER_FIRING_DIRECTION;
+    public static final double DEFAULT_SHOOTER_SPEED;
+
     public void initDefaultCommand() {
         return;
     }
@@ -66,13 +73,13 @@ public class ShooterSubsystem extends Subsystem {
     public void shooterSeperateCycleSpeed() {
         boolean isLBumperPressed = xbox.getBumper(GenericHID.Hand.kLeft);
         if (isLBumperPressed) {
-            shooter1Speed += RobotMap.SHOOTER_SPEED_STEP;
+            shooter1Speed += SHOOTER_SPEED_STEP;
             if (shooter1Speed > 1)
                 shooter1Speed = 0;
         }
         boolean isRBumperPressed = xbox.getBumper(GenericHID.Hand.kRight);
         if (isRBumperPressed) {
-            shooter2Speed += RobotMap.SHOOTER_SPEED_STEP;
+            shooter2Speed += SHOOTER_SPEED_STEP;
             if (shooter2Speed > 1)
                 shooter2Speed = 0;
         }
@@ -100,7 +107,7 @@ public class ShooterSubsystem extends Subsystem {
 
         // if left bumper is pressed reduce the speed for both motors
         if (isLBumperPressed) {
-            shooter2Speed = (shooter2Speed -= RobotMap.SHOOTER_SPEED_STEP) < 0 ? 0 : shooter2Speed;
+            shooter2Speed = (shooter2Speed -= SHOOTER_SPEED_STEP) < 0 ? 0 : shooter2Speed;
             // if shooter speed is less than shooterstart speed. stop
             if (shooter2Speed < shooterStartSpeed)
                 shooter2Speed = 0;
@@ -114,11 +121,11 @@ public class ShooterSubsystem extends Subsystem {
 
         if (isRBumperPressed) {
 
-            shooter2Speed = (shooter2Speed += RobotMap.SHOOTER_SPEED_STEP > 1.0 ? 1 : shooter2Speed);
+            shooter2Speed = (shooter2Speed += SHOOTER_SPEED_STEP > 1.0 ? 1 : shooter2Speed);
 
             // if shooter speed is equal to first speed increment (.25) jump to shooter
             // start speed (.4).
-            if (shooter2Speed == RobotMap.SHOOTER_SPEED_STEP)
+            if (shooter2Speed == SHOOTER_SPEED_STEP)
                 shooter2Speed = shooterStartSpeed;
 
             // Both variables are set to the same speed, but we are using two variables
@@ -128,7 +135,7 @@ public class ShooterSubsystem extends Subsystem {
         if (shooter2Speed < .3) {
             shooter1Speed = shooter2Speed;
         } else {
-            shooter1Speed = shooter2Speed - RobotMap.SHOOTER_SPEED_STEP;
+            shooter1Speed = shooter2Speed - SHOOTER_SPEED_STEP;
         }
         setMotors();
     }
@@ -139,7 +146,7 @@ public class ShooterSubsystem extends Subsystem {
 
         // if left bumper is pressed reduce the speed for both motors
         if (isLBumperPressed) {
-            shooter1Speed = (shooter1Speed -= RobotMap.SHOOTER_SPEED_STEP) < 0 ? 0 : shooter1Speed;
+            shooter1Speed = (shooter1Speed -= SHOOTER_SPEED_STEP) < 0 ? 0 : shooter1Speed;
             // if shooter speed is less than shooterstart speed. stop
             if (shooter1Speed < shooterStartSpeed)
                 shooter1Speed = 0;
@@ -155,11 +162,11 @@ public class ShooterSubsystem extends Subsystem {
 
         if (isRBumperPressed) {
 
-            shooter1Speed = (shooter1Speed += RobotMap.SHOOTER_SPEED_STEP > 1.0 ? 1 : shooter1Speed);
+            shooter1Speed = (shooter1Speed += SHOOTER_SPEED_STEP > 1.0 ? 1 : shooter1Speed);
 
             // if shooter speed is equal to first speed increment (.25) jump to shooter
             // start speed (.4).
-            if (shooter1Speed == RobotMap.SHOOTER_SPEED_STEP)
+            if (shooter1Speed == SHOOTER_SPEED_STEP)
                 shooter1Speed = shooterStartSpeed;
 
             // Both variables are set to the same speed, but we are using two variables
@@ -221,7 +228,7 @@ public class ShooterSubsystem extends Subsystem {
 
     public double getAngle() {
         // use this for now
-        return maxAngleReached();
+        return maxAngleReached() ? 1 : 0;
     }
 
     public boolean maxAngleReached() {
@@ -240,20 +247,20 @@ public class ShooterSubsystem extends Subsystem {
         }
         if (isLoadingPosition)// loading position
         {
-            shooterAngle(RobotMap.SHOOTER_LOADING_DIRECTION);
-            shooter1Speed = RobotMap.SHOOTER_LOADING_SPEED;
-            shooter2Speed = RobotMap.SHOOTER_LOADING_SPEED;
+            shooterAngle(SHOOTER_LOADING_DIRECTION);
+            shooter1Speed = SHOOTER_LOADING_SPEED;
+            shooter2Speed = SHOOTER_LOADING_SPEED;
         } else if (isFiringPosition) {
-            shooterAngle(RobotMap.SHOOTER_FIRING_DIRECTION);
-            shooter1Speed = RobotMap.SHOOTER_FIRING_SPEED;
-            shooter2Speed = RobotMap.SHOOTER_FIRING_SPEED;
+            shooterAngle(SHOOTER_FIRING_DIRECTION);
+            shooter1Speed = SHOOTER_FIRING_SPEED;
+            shooter2Speed = SHOOTER_FIRING_SPEED;
         } else {
 
             // ShooterCycleBehindSpeed();
             shooterAngle(axisY);
             if (xbox.getXButtonPressed()) {
-                shooter2Speed = RobotMap.DEFAULT_SHOOTER_SPEED;
-                shooter1Speed = RobotMap.DEFAULT_SHOOTER_SPEED;
+                shooter2Speed = DEFAULT_SHOOTER_SPEED;
+                shooter1Speed = DEFAULT_SHOOTER_SPEED;
             }
         }
         shooterCycleSpeed();
