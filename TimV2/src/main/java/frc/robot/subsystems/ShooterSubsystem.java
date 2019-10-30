@@ -1,3 +1,4 @@
+package frc.robot.subsystems;
 
 /* This is the CPP file for Shooter Control 
  * Current Version:
@@ -150,7 +151,7 @@ public class ShooterSubsystem extends Subsystem {
         }
 
         // if right bumper is pressed increase the speed for both motors
-        bool isRBumperPressed = xbox.getBumper(GenericHID.Hand.kRight);
+        boolean isRBumperPressed = xbox.getBumper(GenericHID.Hand.kRight);
 
         if (isRBumperPressed) {
 
@@ -197,66 +198,66 @@ public class ShooterSubsystem extends Subsystem {
 
         // check for dead zone i.e +- 1. move motor if beyond dead zone
         if (Math.abs(angleDirection) > .1) {
-            AngleMotor.set(-1 * angleDirection);
-            Angle += angleDirection;
+            angleMotor.set(-1 * angleDirection);
+            angle += angleDirection;
         } else {
-            AngleMotor.set(0.0);
+            angleMotor.set(0.0);
         }
     }
 
-bool ShooterControl::isRunning() {
-	float speed = shooterMotor1->Get();
-	if (speed == 0)
-		return false;
-	else
-		return true;
+    public boolean isRunning() {
+        double speed = shooterMotor1.get();
+        if (speed == 0)
+            return false;
+        else
+            return true;
 
-}
+    }
 
-void ShooterControl::SetShooterMotors(float speed) {
-	shooterMotor1->Set(speed);
-	shooterMotor2->Set(speed);
-}
+    public void SetShooterMotors(float speed) {
+        shooterMotor1.set(speed);
+        shooterMotor2.set(speed);
+    }
 
-float ShooterControl::getAngle() {
-	// use this for now
-	return maxAngleReached();
-}
+    public double getAngle() {
+        // use this for now
+        return maxAngleReached();
+    }
 
-bool ShooterControl::maxAngleReached() {
-	return !upperLimit->Get();
-}
+    public boolean maxAngleReached() {
+        return !upperLimit.get();
+    }
 
     // press right trigger to shoot
-void ShooterControl::run() {
-	APushStop();
-	//ShooterSeperateCycleSpeed();float axisY = xbox->getAxisRightY();
-	goTo();
-	float axisY = xbox->getAxisRightY();
-	if (fabs(axisY) > .2) {
-		isLoadingPosition = false;
-		isFiringPosition = false;
-	}
-	if (isLoadingPosition)//loading position
-	{
-		ShooterAngle(SHOOTERLOADINGDIRECTION);
-		Shooter1Speed = SHOOTERLOADINGSPEED;
-		Shooter2Speed = SHOOTERLOADINGSPEED;
-	} else if (isFiringPosition) {
-		ShooterAngle(SHOOTERFIRINGDIRECTION);
-		Shooter1Speed = SHOOTERFIRINGSPEED;
-		Shooter2Speed = SHOOTERFIRINGSPEED;
-	} else {
+    public void run() {
+        aPushStop();
+        // ShooterSeperateCycleSpeed();float axisY = xbox->getAxisRightY();
+        goTo();
+        double axisY = xbox.getY(GenericHID.Hand.kRight);
+        if (Math.abs(axisY) > .2) {
+            isLoadingPosition = false;
+            isFiringPosition = false;
+        }
+        if (isLoadingPosition)// loading position
+        {
+            shooterAngle(RobotMap.SHOOTER_LOADING_DIRECTION);
+            shooter1Speed = RobotMap.SHOOTER_LOADING_SPEED;
+            shooter2Speed = RobotMap.SHOOTER_LOADING_SPEED;
+        } else if (isFiringPosition) {
+            shooterAngle(RobotMap.SHOOTER_FIRING_DIRECTION);
+            shooter1Speed = RobotMap.SHOOTER_FIRING_SPEED;
+            shooter2Speed = RobotMap.SHOOTER_FIRING_SPEED;
+        } else {
 
-		//ShooterCycleBehindSpeed();
-		ShooterAngle(axisY);
-		if (xbox->isXPressed()) {
-			Shooter2Speed = DEFAULTSHOOTERSPEED;
-			Shooter1Speed = DEFAULTSHOOTERSPEED;
-		}
-	}
-	ShooterCycleSpeed();
-}
+            // ShooterCycleBehindSpeed();
+            shooterAngle(axisY);
+            if (xbox.getXButtonPressed()) {
+                shooter2Speed = RobotMap.DEFAULT_SHOOTER_SPEED;
+                shooter1Speed = RobotMap.DEFAULT_SHOOTER_SPEED;
+            }
+        }
+        shooterCycleSpeed();
+    }
 
     // void ShooterControl::runAutonomous() {
     // shooterMotor1->Set(AUTOSPEED);
@@ -267,12 +268,12 @@ void ShooterControl::run() {
      * if Y is pressed, goes to loading position, turns motors off If B is pressed,
      * goes to firing position, turns motors on
      */
-void ShooterControl::goTo() {
-	if (xbox->isYPressed()) {
-		isLoadingPosition = true;
-	} else if (xbox->isBPressed()) {
-		isFiringPosition = true;
-	}
+    public void goTo() {
+        if (xbox.getYButtonPressed()) {
+            isLoadingPosition = true;
+        } else if (xbox.getBButtonPressed()) {
+            isFiringPosition = true;
+        }
 
-}
+    }
 }
