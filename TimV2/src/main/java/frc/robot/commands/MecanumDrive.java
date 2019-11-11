@@ -15,10 +15,10 @@ public class MecanumDrive extends Command {
 
     protected void execute() {
         //TODO: Map input properly (rate limiting/dead zone/scaling/etc)
-        Robot.driveTrain.mecanumDrive(Robot.m_oi.driver.getY(Hand.kLeft), Robot.m_oi.driver.getX(Hand.kLeft), Robot.m_oi.driver.getX(Hand.kRight));
+        Robot.driveTrain.mecanumDrive(Robot.m_oi.driver.getX(Hand.kLeft), Robot.m_oi.driver.getY(Hand.kLeft), Robot.m_oi.driver.getX(Hand.kRight));
     }
 
     protected boolean isFinished() {
         return false;
     }
-}
+} 
