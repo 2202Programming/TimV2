@@ -8,9 +8,11 @@ package frc.robot.subsystems;
  * */
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.GenericHID;
 import frc.robot.*;
 
@@ -24,15 +26,14 @@ public class ShooterSubsystem extends Subsystem {
      */
     XboxController xbox;
 
-    Victor angleMotor;
-
-    Talon shooterMotor1, shooterMotor2;
-    double shooter1Speed = 0.0, shooter2Speed = 0.0;
-    DigitalInput upperLimit, lowerLimit;
-    final double shooterStartSpeed = .4;
-    boolean isLoadingPosition = false;
-    boolean isFiringPosition = false;
-    double angle;
+    private DoubleSolenoid angleSolenoid;
+    private Talon shooterMotor1, shooterMotor2;
+    private DoubleSolenoid launcherSolenoid;
+    private double shooter1Speed = 0.0, shooter2Speed = 0.0;
+    private final double shooterStartSpeed = .4;
+    private boolean isLoadingPosition = false;
+    private boolean isFiringPosition = false;
+    private double angle;
     /*
         SHOOTERMOTORPORT1 5
         SHOOTERMOTORPORT2 6
@@ -62,15 +63,14 @@ public class ShooterSubsystem extends Subsystem {
 
     public ShooterSubsystem() {
 
-        xbox = new XboxController(RobotMap.XBOX_CONTROLLER_PORT);
+        xbox = new XboxController(1);
 
-        angleMotor = new Victor(RobotMap.SHOOTER_ANGLE_MOTOR_PORT);
+        angleSolenoid = new DoubleSolenoid(RobotMap.SHOOTER_UP_SOL, RobotMap.SHOOTER_DOWN_SOL);
 
         shooterMotor1 = new Talon(RobotMap.SHOOTER_MOTOR_PORT_1);
         shooterMotor2 = new Talon(RobotMap.SHOOTER_MOTOR_PORT_2);
 
-        upperLimit = new DigitalInput(RobotMap.UPPER_LIMIT_PORT);
-        lowerLimit = new DigitalInput(RobotMap.LOWER_LIMIT_PORT);
+        launcherSolenoid = new DoubleSolenoid(RobotMap.LAUNCHER_EXTEND_SOL, RobotMap.LAUNCHER_RETRACT_SOL);
 
     }
 
@@ -108,8 +108,7 @@ public class ShooterSubsystem extends Subsystem {
     }
 
     public void aPushStop() {
-        boolean isAPressed = xbox.getAButton();
-        if (isAPressed) {
+        if (xbox.getAButton()) {
             stopMotors();
             isLoadingPosition = false;
             isFiringPosition = false;
@@ -192,38 +191,13 @@ public class ShooterSubsystem extends Subsystem {
         setMotors();
     }
 
-    public boolean isLowestAngle() {
-        return !lowerLimit.get();
-    }
-
-    // this method sets the angle of the shooter using a motor. elevation is
-    // increased when right trigger is pressed, and it is decreased
-    public void shooterAngle(double angleDirection) {
-        // rightAngle = xbox->getAxisRightY();
-        boolean upperOn = !upperLimit.get();
-        boolean lowerOn = !lowerLimit.get();
-
-        // if we are hitting the limit, cancel the direction so that we don't move the
-        // motor
-        if (lowerOn) {
-            if (angleDirection < 0) {
-                angleDirection = 0;
-                isLoadingPosition = false;
-            }
-        }
-
-        if (upperOn) {
-            if (angleDirection > 0)
-                angleDirection = 0;
-            isFiringPosition = false;
-        }
-
-        // check for dead zone i.e +- 1. move motor if beyond dead zone
-        if (Math.abs(angleDirection) > .1) {
-            angleMotor.set(-1 * angleDirection);
-            angle += angleDirection;
+    // this method sets the angle of the shooter using a solenoid.
+    // erect is up
+    public void setErect(boolean erect) {
+        if (erect) {
+            angleSolenoid.set(Value.kForward);
         } else {
-            angleMotor.set(0.0);
+            angleSolenoid.set(Value.kReverse);
         }
     }
 
@@ -234,15 +208,6 @@ public class ShooterSubsystem extends Subsystem {
     public void SetShooterMotors(float speed) {
         shooterMotor1.set(speed);
         shooterMotor2.set(speed);
-    }
-
-    public double getAngle() {
-        // use this for now
-        return maxAngleReached() ? 1 : 0;
-    }
-
-    public boolean maxAngleReached() {
-        return !upperLimit.get();
     }
 
     // press right trigger to shoot
@@ -257,17 +222,17 @@ public class ShooterSubsystem extends Subsystem {
         }
         if (isLoadingPosition)// loading position
         {
-            shooterAngle(SHOOTER_LOADING_DIRECTION);
+            setErect(false);
             shooter1Speed = SHOOTER_LOADING_SPEED;
             shooter2Speed = SHOOTER_LOADING_SPEED;
         } else if (isFiringPosition) {
-            shooterAngle(SHOOTER_FIRING_DIRECTION);
+            setErect(true);
             shooter1Speed = SHOOTER_FIRING_SPEED;
             shooter2Speed = SHOOTER_FIRING_SPEED;
         } else {
 
             // ShooterCycleBehindSpeed();
-            shooterAngle(axisY);
+            // why shooterAngle(axisY);
             if (xbox.getXButtonPressed()) {
                 shooter2Speed = DEFAULT_SHOOTER_SPEED;
                 shooter1Speed = DEFAULT_SHOOTER_SPEED;
